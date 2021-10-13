@@ -1,0 +1,131 @@
+---
+title: "Data Cleaning"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+downloaded packages
+dplyr
+tidyr
+tidyverse
+```{r}
+library(dplyr)
+library(tidyverse)
+library(tidyverse)
+library(janitor)
+```
+
+The data for the flower counts taken at the TREE in 2021 ended up subsequently in 2 separate formats. SJC's data was fixed by hand. GBL's data was fixed partially by hand and partially in Rstudio. NSR's data will be re-formated entirely in RStudio. Other data may be cleaned and fixed in this file and this will be noted subsequently. 
+
+1. Read csv
+```{r}
+re_data <- read_csv("re_data.csv")
+```
+2. Remove NA columns
+```{r}
+re_data <- Filter(function(x)!all(is.na(x)), re_data)
+```
+
+3. Change column names, drop remaining rows of nas
+```{r}
+flowers_1 <- re_data %>% 
+  drop_na() %>% 
+  mutate(Species = case_when(
+    Species == "Gallium" ~ "Galium_aparine",
+    Species == "Gooseberry" ~ "Ribes_roezlii", 
+    Species == "CA Buttercup" ~ "Ranunculus californicus", 
+    Species == "Blue Dick" ~ "Dichelostemma_capitatum", 
+    Species == "Purple fuzzy" ~ "Phacelia_douglasii?", 
+    Species == "Erodium" ~ "Erodium_sp",
+    Species == "Gilia 2" ~ "Gilia_breccarium",
+    Species == "Popcorn Flower" ~ "Plagiobothrys_nothofulvus", 
+    Species == "TAPF" ~ "TAPF",
+    Species == "Mitchell's Flower" ~ "Calochortus_sp", 
+    Species == "Daucus pusillus" ~ "Daucus_pusillus",
+    Species == "Unknown B" ~ "Unk_B", 
+    Species == "Softie" ~ "Softie?", 
+    Species == "Brysimum capitatum" ~ "Brysimum_capitatum", 
+    Species == "Devyn" ~ "Potentilla_gracillus", 
+    Species == "Deerweed" ~ "Acmispon_glaber", 
+    Species == "Small Yellow Star" ~ "Small_yellow_star?", 
+    Species == "Santa Cruz" ~ "Collinsia_parviflora", 
+    Species == "Georgia" ~ "Georgia?",
+    Species == "Ana" ~ "Clarkia speciosa?", 
+    Species == "Pink Leptosiphon" ~ "Pink_leptosiphon?", 
+    Species == "Tim" ~ "Hemizonia_sp"
+  ))
+```
+
+
+4. Pivot wider
+```{r}
+flowers_1 <- flowers_1 %>% 
+  pivot_wider(names_from = "Species", 
+              values_from = "Count")
+```
+
+5. Replace NAs with zeros
+```{r}
+flowers_1[is.na(flowers_1)] = 0
+```
+
+6. Clean names (could also have done this earlier - oops)
+```{r}
+clean_names(flowers_1)
+```
+write.csv(df, "C:\\Users\\Bob\\Desktop\\data.csv", row.names=FALSE)
+```{r}
+flowers_1_out_edit <- write.csv(flowers_1, "C:\\Users\\stephcopeland\\Desktop\\flower_edit.csv", row.names = FALSE)
+```
+
+Ok, so when I got down here - I realized in flowers_1 that the block was just a numeric value without a differentiation as to what climate the block was located at. It a) would've prevented the r-bind and b) would've made doing any analysis by block very confusing. Not sure how to fix that in R, I read a csv of the file out and mannually fixed it in excel since it's a small dataset and that was going to be quick than figuring out how to code for that error. I am reading that changed file back in after this. 
+
+```{r}
+flowers_1_final <- read_csv("flowers_1_edit.csv")
+```
+
+
+## flowers_1_final is now in the wider format and needs to be combined with the second part of GL's data - process below
+
+1. Reading in 2nd part of GL's data
+```{r}
+re_data_2 <- read_csv("re_data_2.csv")
+```
+2. Removing NAs
+
+```{r}
+re_data_2 <- filter(re_data_2, !is.na(DATE))
+```
+
+data is Ok? clean but we'll rename some column names to make it match flowers_1 and then we'll replace all remaining nas with 0 this'll be flowers_2, I'm also removing the PLOTID tab as this was not carried over for most of the data in 2021? I can always re-add it to the full dataset if needed
+
+```{r}
+flowers_2 <- re_data_2 %>% 
+  rename(c("Date" = "DATE", 
+           "Month" = "MONTH", 
+           "Climate" = "SITE", 
+           "Block" = "BLOCK", 
+           "Plot" = "TREATMENT", 
+           "Transect" = "TRANSECT")) %>% 
+  select(-PLOTID)
+
+flowers_2[is.na(flowers_2)] = 0
+
+```
+
+## Attempt to r-bind these two datasets together (olé)
+
+1. 
+```{r}
+colnames(flowers_1_final)
+```
+
+```{r}
+colnames(flowers_2)
+```
+
