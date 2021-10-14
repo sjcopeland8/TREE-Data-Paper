@@ -118,14 +118,24 @@ flowers_2[is.na(flowers_2)] = 0
 
 ```
 
-## Attempt to r-bind these two datasets together (olé)
+flowers2 %>% 
+rename(date = Date) %>% 
+mutate(Erodium_sp = NA,
+Softie = NA,) %>% 
+select(Date, Month, Climate)
+select(colnames(flower1))
 
-1. 
 ```{r}
-colnames(flowers_1_final)
+mod <- flowers_1_final[,order(colnames(flowers_1_final))]
+colnames(mod)
 ```
 
 ```{r}
-colnames(flowers_2)
+mod1 <- flowers_2[,order(colnames(flowers_2))]
+colnames(mod1)
 ```
+
+
+
+
 

@@ -327,50 +327,47 @@ library(janitor)</code></pre>
   select(-PLOTID)
 
 flowers_2[is.na(flowers_2)] = 0</code></pre>
-</div>
-<div id="attempt-to-r-bind-these-two-datasets-together-olé" class="section level2">
-<h2>Attempt to r-bind these two datasets together (olé)</h2>
-<ol style="list-style-type: decimal">
-<li></li>
-</ol>
-<pre class="r"><code>colnames(flowers_1_final)</code></pre>
-<pre><code>##  [1] &quot;Date&quot;                      &quot;Month&quot;                    
-##  [3] &quot;Climate&quot;                   &quot;Block&quot;                    
-##  [5] &quot;Plot&quot;                      &quot;Transect&quot;                 
-##  [7] &quot;Galium_aparine&quot;            &quot;Ribes_roezlii&quot;            
-##  [9] &quot;Ranunculus californicus&quot;   &quot;Phacelia_douglasii?&quot;      
-## [11] &quot;Erodium_sp&quot;                &quot;Gilia_breccarium&quot;         
-## [13] &quot;Plagiobothrys_nothofulvus&quot; &quot;TAPF&quot;                     
-## [15] &quot;Calochortus_sp&quot;            &quot;Daucus_pusillus&quot;          
-## [17] &quot;Unk_B&quot;                     &quot;Collinsia_parviflora&quot;     
-## [19] &quot;Softie?&quot;                   &quot;Dichelostemma_capitatum&quot;  
-## [21] &quot;Brysimum_capitatum&quot;        &quot;Potentilla_gracillus&quot;     
-## [23] &quot;Acmispon_glaber&quot;           &quot;Small_yellow_star?&quot;       
-## [25] &quot;Georgia?&quot;                  &quot;Clarkia speciosa?&quot;        
-## [27] &quot;Pink_leptosiphon?&quot;         &quot;Hemizonia_sp&quot;</code></pre>
-<pre class="r"><code>colnames(flowers_2)</code></pre>
-<pre><code>##  [1] &quot;Date&quot;                      &quot;Month&quot;                    
-##  [3] &quot;Climate&quot;                   &quot;Block&quot;                    
-##  [5] &quot;Plot&quot;                      &quot;Transect&quot;                 
-##  [7] &quot;Erodium_sp&quot;                &quot;Claytonia_perfoliata&quot;     
-##  [9] &quot;Calandrinia_menziesii&quot;     &quot;Sisymbrium_sp&quot;            
-## [11] &quot;Nemophila_menziesii&quot;       &quot;Plagiobothrys_nothofulvus&quot;
-## [13] &quot;Triteleia_ixioides&quot;        &quot;Triteleia_taxa&quot;           
-## [15] &quot;Galium_aparine&quot;            &quot;Dichelostemma_capitatum&quot;  
-## [17] &quot;Stellaria_media&quot;           &quot;Phacelia_douglasii?&quot;      
-## [19] &quot;Gilia_tricolor&quot;            &quot;Capsella_bursa-pastoris&quot;  
-## [21] &quot;Scrophurlaria_californica&quot; &quot;\nAcmispon_wrangelianus&quot;  
-## [23] &quot;Lupinus_bicolor&quot;           &quot;Lupinus_bicolor (white)&quot;  
-## [25] &quot;Fireweed?&quot;                 &quot;Ribes_roezlii&quot;            
-## [27] &quot;Ranunculus californicus&quot;   &quot;Calochortus_sp&quot;           
-## [29] &quot;Daucus_pusillus&quot;           &quot;Chokeberry/Unk A&quot;         
-## [31] &quot;Lanicera_interrupta&quot;       &quot;Brysimum_capitatum&quot;       
-## [33] &quot;Deerweed&quot;                  &quot;Leptosiphon_minimus&quot;      
-## [35] &quot;White Lotus&quot;               &quot;Penstemon_laetus&quot;         
-## [37] &quot;Purple Star&quot;               &quot;Calystegia_malacophylla&quot;  
-## [39] &quot;Gayophytum diffusum&quot;       &quot;Madia_sp&quot;                 
-## [41] &quot;unk_8&quot;                     &quot;Gilia_breccarium&quot;         
-## [43] &quot;Collinsia_parviflora&quot;</code></pre>
+<p>flowers2 %&gt;% rename(date = Date) %&gt;% mutate(Erodium_sp = NA, Softie = NA,) %&gt;% select(Date, Month, Climate) select(colnames(flower1))</p>
+<pre class="r"><code>mod &lt;- flowers_1_final[,order(colnames(flowers_1_final))]
+colnames(mod)</code></pre>
+<pre><code>##  [1] &quot;Acmispon_glaber&quot;           &quot;Block&quot;                    
+##  [3] &quot;Brysimum_capitatum&quot;        &quot;Calochortus_sp&quot;           
+##  [5] &quot;Clarkia speciosa?&quot;         &quot;Climate&quot;                  
+##  [7] &quot;Collinsia_parviflora&quot;      &quot;Date&quot;                     
+##  [9] &quot;Daucus_pusillus&quot;           &quot;Dichelostemma_capitatum&quot;  
+## [11] &quot;Erodium_sp&quot;                &quot;Galium_aparine&quot;           
+## [13] &quot;Georgia?&quot;                  &quot;Gilia_breccarium&quot;         
+## [15] &quot;Hemizonia_sp&quot;              &quot;Month&quot;                    
+## [17] &quot;Phacelia_douglasii?&quot;       &quot;Pink_leptosiphon?&quot;        
+## [19] &quot;Plagiobothrys_nothofulvus&quot; &quot;Plot&quot;                     
+## [21] &quot;Potentilla_gracillus&quot;      &quot;Ranunculus californicus&quot;  
+## [23] &quot;Ribes_roezlii&quot;             &quot;Small_yellow_star?&quot;       
+## [25] &quot;Softie?&quot;                   &quot;TAPF&quot;                     
+## [27] &quot;Transect&quot;                  &quot;Unk_B&quot;</code></pre>
+<pre class="r"><code>mod1 &lt;- flowers_2[,order(colnames(flowers_2))]
+colnames(mod1)</code></pre>
+<pre><code>##  [1] &quot;\nAcmispon_wrangelianus&quot;   &quot;Block&quot;                    
+##  [3] &quot;Brysimum_capitatum&quot;        &quot;Calandrinia_menziesii&quot;    
+##  [5] &quot;Calochortus_sp&quot;            &quot;Calystegia_malacophylla&quot;  
+##  [7] &quot;Capsella_bursa-pastoris&quot;   &quot;Chokeberry/Unk A&quot;         
+##  [9] &quot;Claytonia_perfoliata&quot;      &quot;Climate&quot;                  
+## [11] &quot;Collinsia_parviflora&quot;      &quot;Date&quot;                     
+## [13] &quot;Daucus_pusillus&quot;           &quot;Deerweed&quot;                 
+## [15] &quot;Dichelostemma_capitatum&quot;   &quot;Erodium_sp&quot;               
+## [17] &quot;Fireweed?&quot;                 &quot;Galium_aparine&quot;           
+## [19] &quot;Gayophytum diffusum&quot;       &quot;Gilia_breccarium&quot;         
+## [21] &quot;Gilia_tricolor&quot;            &quot;Lanicera_interrupta&quot;      
+## [23] &quot;Leptosiphon_minimus&quot;       &quot;Lupinus_bicolor&quot;          
+## [25] &quot;Lupinus_bicolor (white)&quot;   &quot;Madia_sp&quot;                 
+## [27] &quot;Month&quot;                     &quot;Nemophila_menziesii&quot;      
+## [29] &quot;Penstemon_laetus&quot;          &quot;Phacelia_douglasii?&quot;      
+## [31] &quot;Plagiobothrys_nothofulvus&quot; &quot;Plot&quot;                     
+## [33] &quot;Purple Star&quot;               &quot;Ranunculus californicus&quot;  
+## [35] &quot;Ribes_roezlii&quot;             &quot;Scrophurlaria_californica&quot;
+## [37] &quot;Sisymbrium_sp&quot;             &quot;Stellaria_media&quot;          
+## [39] &quot;Transect&quot;                  &quot;Triteleia_ixioides&quot;       
+## [41] &quot;Triteleia_taxa&quot;            &quot;unk_8&quot;                    
+## [43] &quot;White Lotus&quot;</code></pre>
 </div>
 
 
